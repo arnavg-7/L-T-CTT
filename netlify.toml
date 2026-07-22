@@ -1,0 +1,10 @@
+# Single-file static mockup — no build step, served from repo root.
+[build]
+  publish = "."
+  command = ""
+
+# Serve the mockup for any path so shared deep links resolve to the page.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
