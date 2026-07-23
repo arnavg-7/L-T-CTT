@@ -479,40 +479,29 @@ V.grades=`
 
 V.attend=`
 <div class="warnbox">${ic('alert')}<div><div class="wt">Attendance warning</div><div class="wm">You have missed <b>3 consecutive Solar Panel sessions</b>. Please stay on track with your classes — if you're facing any issues, reach out to your mentor Mr Jacob Selvaraj.</div></div></div>
-<div class="tabs" data-tabs="attend" style="margin-bottom:22px"><button class="active" data-p="ov">Overview</button><button data-p="hist">Attendance history</button></div>
-<div data-body="ov">
-  <div class="stats">
-    <div class="stat"><span class="chip c-sky">${ic('cal')}</span><div><div class="v">17</div><div class="k">Total sessions</div></div></div>
-    <div class="stat"><span class="chip c-green">${ic('check')}</span><div><div class="v">14</div><div class="k">Present</div></div></div>
-    <div class="stat"><span class="chip" style="background:var(--bad-bg);color:var(--bad)">${ic('x')}</span><div><div class="v">3</div><div class="k">Absent</div></div></div>
-    <div class="stat"><span class="chip c-lav">${ic('award')}</span><div><div class="v">82%</div><div class="k">Attendance</div></div></div>
-  </div>
-  <div class="card">
-    <div class="head"><h3>By course</h3></div>
-    ${abar('Welder',92,'var(--ok)')}
-    ${abar('Fitter',80,'var(--ok)')}
-    ${abar('Solar Panel',38,'var(--bad)')}
-  </div>
+<div class="stats">
+  <div class="stat"><span class="chip c-sky">${ic('cal')}</span><div><div class="v">17</div><div class="k">Total sessions</div></div></div>
+  <div class="stat"><span class="chip c-green">${ic('check')}</span><div><div class="v">14</div><div class="k">Present</div></div></div>
+  <div class="stat"><span class="chip" style="background:var(--bad-bg);color:var(--bad)">${ic('x')}</span><div><div class="v">3</div><div class="k">Absent</div></div></div>
+  <div class="stat"><span class="chip c-lav">${ic('award')}</span><div><div class="v">82%</div><div class="k">Attendance</div></div></div>
 </div>
-<div data-body="hist" style="display:none">
-  <div class="card">
-    <div class="head"><h3>Attendance records</h3>
-      <button class="btn btn-o btn-sm">${ic('cal')} Jul 2026 ${ic('cv')}</button></div>
-    <div class="legend">
-      <span><i style="background:var(--ok)"></i>Present</span>
-      <span><i style="background:var(--bad)"></i>Absent</span>
-      <span><i style="background:var(--warn)"></i>Tardy</span>
-      <span><i style="background:var(--chip-sky-i)"></i>Leave</span>
-    </div>
-    ${arec('Mon','Jul 20','2026','present')}
-    ${arec('Tue','Jul 21','2026','present')}
-    ${arec('Wed','Jul 22','2026','tardy')}
-    ${arec('Thu','Jul 23','2026','absent')}
-    ${arec('Fri','Jul 24','2026','absent')}
-    ${arec('Mon','Jul 27','2026','absent')}
-    ${arec('Tue','Jul 28','2026','leave')}
-    ${arec('Wed','Jul 29','2026','present')}
+<div class="card">
+  <div class="head"><h3>Attendance records</h3>
+    <button class="btn btn-o btn-sm">${ic('cal')} Jul 2026 ${ic('cv')}</button></div>
+  <div class="legend">
+    <span><i style="background:var(--ok)"></i>Present</span>
+    <span><i style="background:var(--bad)"></i>Absent</span>
+    <span><i style="background:var(--warn)"></i>Tardy</span>
+    <span><i style="background:var(--chip-sky-i)"></i>Leave</span>
   </div>
+  ${arec('Mon','Jul 20','2026','present')}
+  ${arec('Tue','Jul 21','2026','present')}
+  ${arec('Wed','Jul 22','2026','tardy')}
+  ${arec('Thu','Jul 23','2026','absent')}
+  ${arec('Fri','Jul 24','2026','absent')}
+  ${arec('Mon','Jul 27','2026','absent')}
+  ${arec('Tue','Jul 28','2026','leave')}
+  ${arec('Wed','Jul 29','2026','present')}
 </div>`;
 
 V.timetable=`
