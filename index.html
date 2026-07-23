@@ -560,7 +560,7 @@ function trow(num,name,pct,status,sp,assign){const c=pct>=100?'var(--ok)':'var(-
 
 function tclass(time,name,loc,col){return '<div style="display:flex;align-items:center;gap:16px;padding:14px 16px;background:var(--soft);border-left:3px solid '+col+';border-radius:10px;margin-bottom:10px"><div class="time" style="width:120px">'+time+'</div><div style="flex:1;min-width:0"><div style="font-weight:600">'+name+'</div><div class="muted" style="font-size:var(--fs-meta);margin-top:2px">'+loc+'</div></div></div>';}
 function tday(label,today,rows){var r='';for(var k=0;k<rows.length;k++){r+=tclass(rows[k][0],rows[k][1],rows[k][2],rows[k][3]);}return '<div style="margin-bottom:22px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><span style="font-weight:600">'+label+'</span>'+(today?'<span class="pill p-ok">Today</span>':'')+'</div>'+r+'</div>';}
-const NAV=[['profile','user','My Profile'],['dash','home','Home'],['courses','book','My Courses'],['assess','doc','Assessments'],['grades','award','My Grades'],['attend','check','My Attendance'],['timetable','grid','Timetable']];
+const NAV=[['dash','home','Home'],['courses','book','My Courses'],['assess','doc','Assessments'],['grades','award','My Grades'],['attend','check','My Attendance'],['timetable','grid','Timetable']];
 const T={dash:['Home',''],courses:['My Courses',''],content:['Course Content','My Courses › Welder'],assess:['Assessments',''],grades:['My Grades',''],attend:['My Attendance',''],timetable:['Timetable',''],mentor:['Mentoring',''],forum:['Discussion Forum',''],events:['Events',''],profile:['My Profile','']};
 
 const nav=document.getElementById('nav');
