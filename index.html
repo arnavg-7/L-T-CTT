@@ -435,12 +435,10 @@ V.assess=`
 
 V.grades=`
 <div class="card">
-  <div class="head"><h3>My grades</h3><span class="muted" style="font-size:var(--fs-meta)">Assessments · attendance · mentoring</span></div>
-  <table class="tbl"><thead><tr><th>Course</th><th>Score</th><th>Attendance</th><th>Standing</th></tr></thead><tbody>
-    <tr><td class="nm">Welder</td><td>8.9</td><td>92%</td><td><span class="pill p-ok">Distinction</span></td></tr>
-    <tr><td class="nm">Fitter</td><td>8.6</td><td>80%</td><td><span class="pill p-ok">Merit</span></td></tr>
-    <tr><td class="nm">Solar Panel</td><td>6.8</td><td>38%</td><td><span class="pill p-warn">At risk</span></td></tr>
-  </tbody></table>
+  <div class="head"><h3>My grades</h3><span class="muted" style="font-size:var(--fs-meta)">Course level · expand for assessments</span></div>
+  ${gacc(true,'c-green','chip2','Welder','8.9','Distinction','p-ok',[['Safety MCQ','Quiz','18 / 20','p-ok','Passed'],['Weld Symbols','Assignment','9 / 10','p-ok','Passed'],['Practical Weld Test','Practical','45 / 50','p-ok','Passed'],['Tools & Safety','Quiz','14 / 15','p-ok','Passed']])}
+  ${gacc(false,'c-sky','tool','Fitter','8.6','Merit','p-ok',[['Bench Fitting','Practical','42 / 50','p-ok','Passed'],['Measurement & Marking','Quiz','12 / 15','p-ok','Passed'],['Tolerances','Assignment','8 / 10','p-ok','Passed']])}
+  ${gacc(false,'c-amber','wifi','Solar Panel','6.8','At risk','p-warn',[['PV Fundamentals','Quiz','11 / 20','p-ok','Passed'],['Panel Wiring','Assignment','5 / 10','p-bad','Retake'],['Module 3 Quiz','Quiz','—','p-warn','Pending']])}
 </div>`;
 
 V.attend=`
@@ -550,6 +548,10 @@ function abar(nm,p,col){return '<div style="margin-bottom:16px"><div style="disp
 function mrow(nm,date,sp,st){return '<div class="lrow"><div style="flex:1"><div class="nm">'+nm+'</div><div class="mt">'+date+'</div></div><span class="pill '+sp+'">'+st+'</span></div>';}
 function thr(av,t,mt){return '<div class="thr"><div class="ava">'+av+'</div><div style="flex:1"><div class="nm">'+t+'</div><div class="mt">'+mt+'</div></div></div>';}
 function evc(bg,dt,nm){return '<div class="evc"><div class="img" style="background:'+bg+'"></div><div class="body"><div class="dt">'+dt+'</div><div class="nm">'+nm+'</div></div></div>';}
+function gacc(open,c,i,course,score,standing,sp,rows){var b='';for(var k=0;k<rows.length;k++){var r=rows[k];b+='<tr><td class="nm">'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td><td><span class="pill '+r[3]+'">'+r[4]+'</span></td></tr>';}
+  return '<div class="acc'+(open?' open':'')+'"><div class="acc-h">'+chip(c,i)+'<span class="t">'+course+'</span>'+
+    '<span style="margin-left:auto;display:flex;align-items:center;gap:18px"><span class="muted" style="font-size:var(--fs-meta)">Overall <b style="color:var(--ink)">'+score+'</b></span><span class="pill '+sp+'">'+standing+'</span></span>'+
+    ic('cv','cv')+'</div><div class="acc-b"><table class="tbl" style="margin-top:2px"><thead><tr><th>Assessment</th><th>Type</th><th>Score</th><th>Result</th></tr></thead><tbody>'+b+'</tbody></table></div></div>';}
 function mod(active,num,name,dur){return '<div class="mod'+(active?' active':'')+'"><div class="mn">'+num+'. '+name+'</div><div class="md">'+ic('clock')+dur+'</div></div>';}
 function trow(num,name,pct,status,sp,assign){const c=pct>=100?'var(--ok)':'var(--primary)';return '<div class="trow"><div><div class="tn">Topic '+num+'</div><div class="tt">'+name+'</div></div><div style="display:flex;align-items:center;gap:12px"><div style="flex:1;height:6px;border-radius:99px;background:var(--line);overflow:hidden"><i style="display:block;height:100%;width:'+pct+'%;background:'+c+'"></i></div><span class="muted" style="font-size:var(--fs-meta);width:34px;text-align:right">'+pct+'%</span></div><span class="pill '+sp+'">'+status+'</span><div class="muted" style="font-size:var(--fs-meta);text-align:right">Assign <b style="color:var(--ink)">'+assign+'</b></div></div>';}
 
