@@ -358,26 +358,11 @@ V.dash=`
 
 V.courses=`
 <div class="card">
-  <div class="tabs" data-tabs="courses"><button class="active" data-p="grid">Courses</button><button data-p="hist">Attendance history</button></div>
-  <div data-body="grid">
-    <div class="grid g3">
-      ${ccourse('c-green','chip2','Welder','Section A · 2022',62,92,'p-ok','On track')}
-      ${ccourse('c-sky','tool','Fitter','Section A · 2024',80,80,'p-ok','On track')}
-      ${ccourse('c-amber','wifi','Solar Panel','Section B · 2025',38,38,'p-warn','At risk')}
-    </div>
-  </div>
-  <div data-body="hist" style="display:none">
-    <div class="head"><h3>Attendance history</h3>
-      <div class="seg"><button class="active">All courses</button><button>Welder</button><button>Fitter</button><button>Solar Panel</button></div></div>
-    <table class="tbl"><thead><tr><th>Course</th><th>Session</th><th>Date</th><th>Status</th></tr></thead><tbody>
-      <tr><td class="nm">Welder</td><td>Welding Theory</td><td>20 Jul 2026</td><td><span class="pill p-ok">Present</span></td></tr>
-      <tr><td class="nm">Fitter</td><td>Bench Fitting</td><td>19 Jul 2026</td><td><span class="pill p-ok">Present</span></td></tr>
-      <tr><td class="nm">Welder</td><td>Weld Inspection</td><td>18 Jul 2026</td><td><span class="pill p-bad">Absent</span></td></tr>
-      <tr><td class="nm">Solar Panel</td><td>Panel Wiring</td><td>17 Jul 2026</td><td><span class="pill p-bad">Absent</span></td></tr>
-      <tr><td class="nm">Welder</td><td>Safety Systems</td><td>17 Jul 2026</td><td><span class="pill p-ok">Present</span></td></tr>
-      <tr><td class="nm">Fitter</td><td>Measurement & Marking</td><td>16 Jul 2026</td><td><span class="pill p-ok">Present</span></td></tr>
-      <tr><td class="nm">Solar Panel</td><td>PV Fundamentals</td><td>15 Jul 2026</td><td><span class="pill p-ok">Present</span></td></tr>
-    </tbody></table>
+  <div class="head"><h3>My courses</h3></div>
+  <div class="grid g3">
+    ${ccourse('c-green','chip2','Welder','Section A · 2022',62,92,'p-ok','On track')}
+    ${ccourse('c-sky','tool','Fitter','Section A · 2024',80,80,'p-ok','On track')}
+    ${ccourse('c-amber','wifi','Solar Panel','Section B · 2025',38,38,'p-warn','At risk')}
   </div>
 </div>`;
 
@@ -459,29 +444,39 @@ V.grades=`
 </div>`;
 
 V.attend=`
-<div class="grid g2e" style="margin-bottom:20px">
-  <div class="card" style="display:flex;align-items:center;gap:26px">
-    <div style="position:relative;display:grid;place-items:center">${ringBig(82)}</div>
-    <div>
-      <div class="lbl">This month</div>
-      <div style="margin-top:8px">14 of 17 sessions</div>
-      <div class="pill p-ok" style="margin-top:10px">+7% vs last month</div>
+<div class="tabs" data-tabs="attend" style="margin-bottom:22px"><button class="active" data-p="ov">Overview</button><button data-p="hist">Attendance history</button></div>
+<div data-body="ov">
+  <div class="grid g2e">
+    <div class="card" style="display:flex;align-items:center;gap:26px">
+      <div style="position:relative;display:grid;place-items:center">${ringBig(82)}</div>
+      <div>
+        <div class="lbl">This month</div>
+        <div style="margin-top:8px">14 of 17 sessions</div>
+        <div class="pill p-ok" style="margin-top:10px">+7% vs last month</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="head"><h3>By course</h3></div>
+      ${abar('Welder',92,'var(--ok)')}
+      ${abar('Fitter',80,'var(--ok)')}
+      ${abar('Solar Panel',38,'var(--bad)')}
     </div>
   </div>
-  <div class="card">
-    <div class="head"><h3>By course</h3></div>
-    ${abar('Welder',92,'var(--ok)')}
-    ${abar('Fitter',80,'var(--ok)')}
-    ${abar('Solar Panel',38,'var(--bad)')}
-  </div>
 </div>
-<div class="card">
-  <div class="head"><h3>Recent</h3></div>
-  <table class="tbl"><thead><tr><th>Session</th><th>Date</th><th>Status</th></tr></thead><tbody>
-    <tr><td class="nm">Welding Theory</td><td>20 Jul</td><td><span class="pill p-ok">Present</span></td></tr>
-    <tr><td class="nm">Weld Inspection</td><td>18 Jul</td><td><span class="pill p-bad">Absent</span></td></tr>
-    <tr><td class="nm">Safety Systems</td><td>17 Jul</td><td><span class="pill p-ok">Present</span></td></tr>
-  </tbody></table>
+<div data-body="hist" style="display:none">
+  <div class="card">
+    <div class="head"><h3>Attendance history</h3>
+      <div class="seg"><button class="active">All courses</button><button>Welder</button><button>Fitter</button><button>Solar Panel</button></div></div>
+    <table class="tbl"><thead><tr><th>Course</th><th>Session</th><th>Date</th><th>Status</th></tr></thead><tbody>
+      <tr><td class="nm">Welder</td><td>Welding Theory</td><td>20 Jul 2026</td><td><span class="pill p-ok">Present</span></td></tr>
+      <tr><td class="nm">Fitter</td><td>Bench Fitting</td><td>19 Jul 2026</td><td><span class="pill p-ok">Present</span></td></tr>
+      <tr><td class="nm">Welder</td><td>Weld Inspection</td><td>18 Jul 2026</td><td><span class="pill p-bad">Absent</span></td></tr>
+      <tr><td class="nm">Solar Panel</td><td>Panel Wiring</td><td>17 Jul 2026</td><td><span class="pill p-bad">Absent</span></td></tr>
+      <tr><td class="nm">Welder</td><td>Safety Systems</td><td>17 Jul 2026</td><td><span class="pill p-ok">Present</span></td></tr>
+      <tr><td class="nm">Fitter</td><td>Measurement & Marking</td><td>16 Jul 2026</td><td><span class="pill p-ok">Present</span></td></tr>
+      <tr><td class="nm">Solar Panel</td><td>PV Fundamentals</td><td>15 Jul 2026</td><td><span class="pill p-ok">Present</span></td></tr>
+    </tbody></table>
+  </div>
 </div>`;
 
 V.timetable=`
