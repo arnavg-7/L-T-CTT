@@ -239,6 +239,22 @@
   .trow .tn{font-size:var(--fs-meta);color:var(--muted)}
   .trow .tt{font-weight:600;margin-top:2px}
   @media (max-width:900px){.csplit{grid-template-columns:1fr}.csplit .left{border:none;padding:0 0 20px}.csplit .right{padding:0}.trow{grid-template-columns:1fr auto}}
+  .modal{position:fixed;inset:0;background:rgba(20,40,92,.4);display:none;align-items:center;justify-content:center;padding:20px;z-index:100}
+  .modal.show{display:flex}
+  .mbox{background:var(--card);border-radius:var(--r);box-shadow:0 20px 55px rgba(0,0,0,.28);max-width:430px;width:100%;padding:26px 28px;animation:pop .18s ease}
+  @keyframes pop{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
+  .micon{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;margin-bottom:16px}
+  .micon svg{width:22px;height:22px}
+  .mtitle{font-size:var(--fs-sec);font-weight:700}
+  .mmsg{color:var(--muted);margin-top:9px;line-height:1.6}
+  .mmsg b{color:var(--ink)}
+  .mbtns{display:flex;justify-content:flex-end;gap:12px;margin-top:24px}
+  .qtimer{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:15px;color:var(--primary);background:var(--chip-sky);padding:9px 15px;border-radius:12px;font-variant-numeric:tabular-nums}
+  .qtimer svg{width:16px;height:16px}
+  .qtimer.low{color:var(--bad);background:var(--bad-bg)}
+  .qb{margin-bottom:26px}
+  .qb .qn{font-size:var(--fs-meta);color:var(--muted)}
+  .qb .qq{font-weight:600;margin-top:4px}
   .view{display:none}
   .view.active{display:block;animation:f .2s ease}
   @keyframes f{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
@@ -276,6 +292,7 @@
     <div id="views"></div>
   </main>
 </div>
+<div id="modal" class="modal"></div>
 <button class="tgl" id="tgl" aria-label="Toggle theme"></button>
 
 <script>
@@ -420,16 +437,24 @@ V.assess=`
       <tr><td class="nm">Intro Quiz</td><td>9 / 20</td><td><span class="pill p-bad">Retake</span></td></tr>
     </tbody></table>
   </div>
-  <div data-body="take" style="display:none">
-    <div class="muted" style="font-size:var(--fs-meta);margin-bottom:6px">Welder — Safety MCQ · Question 1 of 20</div>
-    <h3 style="font-size:var(--fs-sec);font-weight:600;margin-bottom:18px">Which PPE is mandatory before striking an arc?</h3>
-    <label class="opt"><span class="dot"></span> Welding helmet with correct shade</label>
-    <label class="opt"><span class="dot"></span> Cotton gloves only</label>
-    <label class="opt"><span class="dot"></span> Ear plugs</label>
-    <label class="opt"><span class="dot"></span> No PPE required</label>
-    <div style="display:flex;justify-content:space-between;margin-top:20px">
-      <button class="btn btn-o" data-tabgo="pend">${ic('arrl')} Back</button><button class="btn btn-p">Next ${ic('arr')}</button>
-    </div>
+</div>`;
+
+V.quiz=`
+<div class="card">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:6px">
+    <div><div class="muted" style="font-size:var(--fs-meta)">Welder · one attempt</div><h3 style="margin-top:3px">Safety MCQ</h3></div>
+    <div class="qtimer" id="qtwrap">${ic('clock')}<span id="qtimer">15:00</span></div>
+  </div>
+  <div class="muted" style="font-size:var(--fs-meta);margin-bottom:24px">6 questions · answer all before the timer runs out</div>
+  ${qblock(1,'Which PPE is mandatory before striking an arc?',['Welding helmet with correct shade','Cotton gloves only','Ear plugs','No PPE required'])}
+  ${qblock(2,'What most commonly causes porosity in a weld?',['Correct shielding gas flow','Contamination or moisture on the joint','Clean, dry base metal','Using the right electrode'])}
+  ${qblock(3,'Which process uses a consumable wire electrode fed automatically?',['TIG (GTAW)','MIG/MAG (GMAW)','Oxy-acetylene','Stick (SMAW)'])}
+  ${qblock(4,'What should the work area be before you begin welding?',['Cluttered with tools','Clear of flammable materials','Wet to cool the metal','Poorly ventilated'])}
+  ${qblock(5,'A fillet weld typically joins:',['Two surfaces meeting at right angles','Two edges in the same plane','A pipe to itself','Nothing structural'])}
+  ${qblock(6,'Which is the correct action if your helmet shade is too light?',['Continue welding anyway','Stop and fit the correct shade','Squint to reduce glare','Weld with eyes closed'])}
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;padding-top:22px;border-top:1px solid var(--line)">
+    <button class="btn btn-o" data-goto="assess">${ic('arrl')} Exit</button>
+    <button class="btn btn-p" data-submit>Complete assessment</button>
   </div>
 </div>`;
 
@@ -543,7 +568,8 @@ function dpend(nm,mt,sp,st){return '<div class="lrow"><span class="chip c-sky" s
 function dmini(c,dn,mo,nm){return '<div class="lrow"><span class="chip '+c+'" style="flex-direction:column;width:44px;height:48px;line-height:1;border-radius:11px"><b style="font-size:15px">'+dn+'</b><span style="font-size:9px">'+mo+'</span></span><div class="nm" style="flex:1">'+nm+'</div></div>';}
 function acc(open,c,t,cnt,lessons){let b='';lessons.forEach(l=>{b+='<div class="lesson">'+ic(l[0])+'<span class="t">'+l[1]+'</span></div>';});
   return '<div class="acc'+(open?' open':'')+'"><div class="acc-h">'+chip(c,'play')+'<span class="t">'+t+'</span><span class="cnt">'+cnt+'</span>'+ic('cv','cv')+'</div><div class="acc-b">'+b+'</div></div>';}
-function arow(nm,course,due,sp,st){return '<div class="lrow"><div style="flex:1"><div class="nm">'+nm+'</div><div class="mt">'+course+' · due '+due+'</div></div><span class="pill '+sp+'">'+st+'</span><button class="btn btn-p btn-sm" data-tabgo="take" style="margin-left:14px">Start</button></div>';}
+function arow(nm,course,due,sp,st){return '<div class="lrow"><div style="flex:1"><div class="nm">'+nm+'</div><div class="mt">'+course+' · due '+due+'</div></div><span class="pill '+sp+'">'+st+'</span><button class="btn btn-p btn-sm" data-start="'+nm+'" style="margin-left:14px">Start</button></div>';}
+function qblock(n,q,opts){var o='';for(var i=0;i<opts.length;i++){o+='<label class="opt"><span class="dot"></span> '+opts[i]+'</label>';}return '<div class="qb"><div><span class="qn">Question '+n+'</span><div class="qq">'+q+'</div></div><div style="margin-top:14px">'+o+'</div></div>';}
 function abar(nm,p,col){return '<div style="margin-bottom:16px"><div style="display:flex;justify-content:space-between;margin-bottom:7px"><span style="font-weight:500">'+nm+'</span><span style="font-weight:600;color:'+col+'">'+p+'%</span></div><div style="height:6px;border-radius:99px;background:var(--line);overflow:hidden"><i style="display:block;height:100%;width:'+p+'%;background:'+col+'"></i></div></div>';}
 function mrow(nm,date,sp,st){return '<div class="lrow"><div style="flex:1"><div class="nm">'+nm+'</div><div class="mt">'+date+'</div></div><span class="pill '+sp+'">'+st+'</span></div>';}
 function thr(av,t,mt){return '<div class="thr"><div class="ava">'+av+'</div><div style="flex:1"><div class="nm">'+t+'</div><div class="mt">'+mt+'</div></div></div>';}
@@ -558,7 +584,11 @@ function trow(num,name,pct,status,sp,assign){const c=pct>=100?'var(--ok)':'var(-
 function tclass(time,name,loc,col){return '<div style="display:flex;align-items:center;gap:16px;padding:14px 16px;background:var(--soft);border-left:3px solid '+col+';border-radius:10px;margin-bottom:10px"><div class="time" style="width:120px">'+time+'</div><div style="flex:1;min-width:0"><div style="font-weight:600">'+name+'</div><div class="muted" style="font-size:var(--fs-meta);margin-top:2px">'+loc+'</div></div></div>';}
 function tday(label,today,rows){var r='';for(var k=0;k<rows.length;k++){r+=tclass(rows[k][0],rows[k][1],rows[k][2],rows[k][3]);}return '<div style="margin-bottom:22px"><div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><span style="font-weight:600">'+label+'</span>'+(today?'<span class="pill p-ok">Today</span>':'')+'</div>'+r+'</div>';}
 const NAV=[['dash','home','Home'],['courses','book','My Courses'],['assess','doc','Assessments'],['grades','award','My Grades'],['attend','check','My Attendance'],['timetable','grid','Timetable']];
-const T={dash:['Home',''],courses:['My Courses',''],content:['Course Content','My Courses › Welder'],assess:['Assessments',''],grades:['My Grades',''],attend:['My Attendance',''],timetable:['Timetable',''],mentor:['Mentoring',''],forum:['Discussion Forum',''],events:['Events',''],profile:['My Profile','']};
+const T={dash:['Home',''],courses:['My Courses',''],content:['Course Content','My Courses › Welder'],assess:['Assessments',''],quiz:['Assessment','Assessments › Safety MCQ'],grades:['My Grades',''],attend:['My Attendance',''],timetable:['Timetable',''],mentor:['Mentoring',''],forum:['Discussion Forum',''],events:['Events',''],profile:['My Profile','']};
+let quizTimer=null,modalAction=null;
+function openModal(c,i,title,msg,confirmLabel,action){modalAction=action||null;const m=document.getElementById('modal');m.innerHTML='<div class="mbox"><div class="micon '+c+'">'+ic(i)+'</div><div class="mtitle">'+title+'</div><div class="mmsg">'+msg+'</div><div class="mbtns"><button class="btn btn-o" data-mclose>Cancel</button><button class="btn btn-p" data-mconfirm>'+confirmLabel+'</button></div></div>';m.classList.add('show');}
+function closeModal(){const m=document.getElementById('modal');m.classList.remove('show');m.innerHTML='';modalAction=null;}
+function startQuizTimer(){clearInterval(quizTimer);var t=15*60;var span=document.getElementById('qtimer');var wrap=document.getElementById('qtwrap');if(!span)return;function tick(){var m=String(Math.floor(t/60)).padStart(2,'0');var s=String(t%60).padStart(2,'0');span.textContent=m+':'+s;if(wrap&&t<=60)wrap.classList.add('low');if(t<=0){clearInterval(quizTimer);quizTimer=null;return;}t--;}tick();quizTimer=setInterval(tick,1000);}
 
 const nav=document.getElementById('nav');
 NAV.forEach(([id,i,l])=>{const a=document.createElement('a');a.dataset.goto=id;a.innerHTML=ic(i)+'<span>'+l+'</span>';nav.appendChild(a);});
@@ -567,15 +597,22 @@ document.getElementById('a-gear').innerHTML=ic('gear');
 
 const views=document.getElementById('views');
 function render(id){
+  if(quizTimer){clearInterval(quizTimer);quizTimer=null;}
   views.innerHTML='<section class="view active">'+V[id]+'</section>';
-  const navId=(id==='content')?'courses':id;
+  const navMap={content:'courses',quiz:'assess'};const navId=navMap[id]||id;
   document.querySelectorAll('#nav > a').forEach(a=>a.classList.toggle('active',a.dataset.goto===navId));
   document.getElementById('pg-title').textContent=T[id][0];
   document.getElementById('pg-crumb').textContent=T[id][1];
   if(id==='timetable')cal();
+  if(id==='quiz')startQuizTimer();
   scrollTo(0,0);
 }
 document.addEventListener('click',e=>{
+  if(e.target.id==='modal'){closeModal();return;}
+  if(e.target.closest('[data-mclose]')){closeModal();return;}
+  if(e.target.closest('[data-mconfirm]')){const a=modalAction;closeModal();if(a)a();return;}
+  const st=e.target.closest('[data-start]');if(st){const nm=st.dataset.start;openModal('c-sky','doc','Start assessment','You are about to start <b>'+nm+'</b>.<br>6 questions · 15 minutes · one attempt. The timer starts as soon as you begin.','Start now',function(){render('quiz');});return;}
+  if(e.target.closest('[data-submit]')){openModal('c-green','check','Submit assessment','Submit <b>Safety MCQ</b> for grading? You won’t be able to change your answers after submitting.','Submit',function(){render('assess');setTab('assess','done');});return;}
   const g=e.target.closest('[data-goto]');if(g){e.preventDefault();render(g.dataset.goto);return;}
   const tg=e.target.closest('[data-tabgo]');if(tg){setTab('assess',tg.dataset.tabgo);return;}
   const tb=e.target.closest('.tabs button');if(tb){const w=tb.closest('.tabs');w.querySelectorAll('button').forEach(b=>b.classList.remove('active'));tb.classList.add('active');if(tb.dataset.p){const sc=w.closest('.card')||document;sc.querySelectorAll('[data-body]').forEach(b=>b.style.display=b.dataset.body===tb.dataset.p?'':'none');}return;}
