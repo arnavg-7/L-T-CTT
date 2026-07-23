@@ -255,6 +255,15 @@
   .qb{margin-bottom:26px}
   .qb .qn{font-size:var(--fs-meta);color:var(--muted)}
   .qb .qq{font-weight:600;margin-top:4px}
+  .warnbox{background:var(--warn-bg);border-radius:var(--r);padding:16px 20px;display:flex;gap:14px;align-items:flex-start;margin-bottom:20px}
+  .warnbox svg{width:22px;height:22px;color:var(--warn);flex:none;margin-top:1px}
+  .warnbox .wt{font-weight:700;color:var(--warn)}
+  .warnbox .wm{color:var(--warn);opacity:.92;margin-top:3px;font-size:var(--fs-meta);line-height:1.55}
+  .warnbox .wm b{opacity:1}
+  .daycirc{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-weight:600;font-size:var(--fs-meta);flex:none}
+  .legend{display:flex;gap:20px;flex-wrap:wrap;padding-bottom:18px;margin-bottom:4px;border-bottom:1px solid var(--line)}
+  .legend span{display:inline-flex;align-items:center;gap:7px;font-size:var(--fs-meta);color:var(--muted)}
+  .legend i{width:9px;height:9px;border-radius:50%}
   .view{display:none}
   .view.active{display:block;animation:f .2s ease}
   @keyframes f{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
@@ -318,7 +327,9 @@ const ICONS={
   chip2:'M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3M5 5h14v14H5zM9 9h6v6H9z',
   wifi:'M2 8.5a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0M8 15.5a5 5 0 0 1 8 0M12 19h.01',
   tool:'M15 7a4 4 0 0 1-5.2 3.8L5 15.5 8.5 19l4.7-4.8A4 4 0 0 0 17 9l-2 2-2-2z',
-  clock:'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7.5V12l3 1.8'
+  clock:'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7.5V12l3 1.8',
+  alert:'M10.3 3.9 2.7 17.2a2 2 0 0 0 1.7 3h15.2a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01',
+  x:'M6 6l12 12M18 6L6 18'
 };
 function ic(n,c){return '<svg class="'+(c||'')+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="'+(ICONS[n]||'')+'"/></svg>';}
 function chip(c,i){return '<span class="chip '+c+'">'+ic(i)+'</span>';}
@@ -467,38 +478,40 @@ V.grades=`
 </div>`;
 
 V.attend=`
+<div class="warnbox">${ic('alert')}<div><div class="wt">Attendance warning</div><div class="wm">You have missed <b>3 consecutive Solar Panel sessions</b>. Please stay on track with your classes — if you're facing any issues, reach out to your mentor Mr Jacob Selvaraj.</div></div></div>
 <div class="tabs" data-tabs="attend" style="margin-bottom:22px"><button class="active" data-p="ov">Overview</button><button data-p="hist">Attendance history</button></div>
 <div data-body="ov">
-  <div class="grid g2e">
-    <div class="card" style="display:flex;align-items:center;gap:26px">
-      <div style="position:relative;display:grid;place-items:center">${ringBig(82)}</div>
-      <div>
-        <div class="lbl">This month</div>
-        <div style="margin-top:8px">14 of 17 sessions</div>
-        <div class="pill p-ok" style="margin-top:10px">+7% vs last month</div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="head"><h3>By course</h3></div>
-      ${abar('Welder',92,'var(--ok)')}
-      ${abar('Fitter',80,'var(--ok)')}
-      ${abar('Solar Panel',38,'var(--bad)')}
-    </div>
+  <div class="stats">
+    <div class="stat"><span class="chip c-sky">${ic('cal')}</span><div><div class="v">17</div><div class="k">Total sessions</div></div></div>
+    <div class="stat"><span class="chip c-green">${ic('check')}</span><div><div class="v">14</div><div class="k">Present</div></div></div>
+    <div class="stat"><span class="chip" style="background:var(--bad-bg);color:var(--bad)">${ic('x')}</span><div><div class="v">3</div><div class="k">Absent</div></div></div>
+    <div class="stat"><span class="chip c-lav">${ic('award')}</span><div><div class="v">82%</div><div class="k">Attendance</div></div></div>
+  </div>
+  <div class="card">
+    <div class="head"><h3>By course</h3></div>
+    ${abar('Welder',92,'var(--ok)')}
+    ${abar('Fitter',80,'var(--ok)')}
+    ${abar('Solar Panel',38,'var(--bad)')}
   </div>
 </div>
 <div data-body="hist" style="display:none">
   <div class="card">
-    <div class="head"><h3>Attendance history</h3>
-      <div class="seg"><button class="active">All courses</button><button>Welder</button><button>Fitter</button><button>Solar Panel</button></div></div>
-    <table class="tbl"><thead><tr><th>Course</th><th>Session</th><th>Date</th><th>Status</th></tr></thead><tbody>
-      <tr><td class="nm">Welder</td><td>Welding Theory</td><td>20 Jul 2026</td><td><span class="pill p-ok">Present</span></td></tr>
-      <tr><td class="nm">Fitter</td><td>Bench Fitting</td><td>19 Jul 2026</td><td><span class="pill p-ok">Present</span></td></tr>
-      <tr><td class="nm">Welder</td><td>Weld Inspection</td><td>18 Jul 2026</td><td><span class="pill p-bad">Absent</span></td></tr>
-      <tr><td class="nm">Solar Panel</td><td>Panel Wiring</td><td>17 Jul 2026</td><td><span class="pill p-bad">Absent</span></td></tr>
-      <tr><td class="nm">Welder</td><td>Safety Systems</td><td>17 Jul 2026</td><td><span class="pill p-ok">Present</span></td></tr>
-      <tr><td class="nm">Fitter</td><td>Measurement & Marking</td><td>16 Jul 2026</td><td><span class="pill p-ok">Present</span></td></tr>
-      <tr><td class="nm">Solar Panel</td><td>PV Fundamentals</td><td>15 Jul 2026</td><td><span class="pill p-ok">Present</span></td></tr>
-    </tbody></table>
+    <div class="head"><h3>Attendance records</h3>
+      <button class="btn btn-o btn-sm">${ic('cal')} Jul 2026 ${ic('cv')}</button></div>
+    <div class="legend">
+      <span><i style="background:var(--ok)"></i>Present</span>
+      <span><i style="background:var(--bad)"></i>Absent</span>
+      <span><i style="background:var(--warn)"></i>Tardy</span>
+      <span><i style="background:var(--chip-sky-i)"></i>Leave</span>
+    </div>
+    ${arec('Mon','Jul 20','2026','present')}
+    ${arec('Tue','Jul 21','2026','present')}
+    ${arec('Wed','Jul 22','2026','tardy')}
+    ${arec('Thu','Jul 23','2026','absent')}
+    ${arec('Fri','Jul 24','2026','absent')}
+    ${arec('Mon','Jul 27','2026','absent')}
+    ${arec('Tue','Jul 28','2026','leave')}
+    ${arec('Wed','Jul 29','2026','present')}
   </div>
 </div>`;
 
@@ -574,6 +587,7 @@ function abar(nm,p,col){return '<div style="margin-bottom:16px"><div style="disp
 function mrow(nm,date,sp,st){return '<div class="lrow"><div style="flex:1"><div class="nm">'+nm+'</div><div class="mt">'+date+'</div></div><span class="pill '+sp+'">'+st+'</span></div>';}
 function thr(av,t,mt){return '<div class="thr"><div class="ava">'+av+'</div><div style="flex:1"><div class="nm">'+t+'</div><div class="mt">'+mt+'</div></div></div>';}
 function evc(bg,dt,nm){return '<div class="evc"><div class="img" style="background:'+bg+'"></div><div class="body"><div class="dt">'+dt+'</div><div class="nm">'+nm+'</div></div></div>';}
+function arec(day,date,year,status){var map={present:['var(--ok-bg)','var(--ok)','p-ok','Present'],absent:['var(--bad-bg)','var(--bad)','p-bad','Absent'],tardy:['var(--warn-bg)','var(--warn)','p-warn','Tardy'],leave:['var(--chip-sky)','var(--chip-sky-i)','p-info','Leave']};var m=map[status];return '<div class="lrow"><div class="daycirc" style="background:'+m[0]+';color:'+m[1]+'">'+day+'</div><div style="flex:1"><div class="nm">'+date+'</div><div class="mt">'+year+'</div></div><span class="pill '+m[2]+'">'+m[3]+'</span></div>';}
 function gacc(open,c,i,course,score,standing,sp,rows){var b='';for(var k=0;k<rows.length;k++){var r=rows[k];b+='<tr><td class="nm">'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td><td><span class="pill '+r[3]+'">'+r[4]+'</span></td></tr>';}
   return '<div class="acc'+(open?' open':'')+'"><div class="acc-h">'+chip(c,i)+'<span class="t">'+course+'</span>'+
     '<span style="margin-left:auto;display:flex;align-items:center;gap:18px"><span class="muted" style="font-size:var(--fs-meta)">Overall <b style="color:var(--ink)">'+score+'</b></span><span class="pill '+sp+'">'+standing+'</span></span>'+
